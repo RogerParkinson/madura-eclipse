@@ -1,0 +1,21 @@
+/*******************************************************************************
+ * Madura Rules
+ *******************************************************************************/
+formula: SampleObject "sample formula"
+{
+	decisionField = celsius > 30F;
+}
+rule: SampleObject "sample rule"
+{
+	if (size == "Small")
+	{
+		readonly(testing);
+		activate(testing);
+		amount = 10;
+	}
+}
+constraint: SampleObject "sample constraint"
+{
+	testDouble > 100D;
+}
+

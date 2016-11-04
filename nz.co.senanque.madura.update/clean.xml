@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="nz.co.senanque.madura.update" default="clean.site" basedir=".">
+	
+	<target name="clean.site">
+		<delete failonerror="false">
+			<fileset dir="." includes="**/*.jar"/>
+		</delete>
+		<delete dir="features"/>
+		<delete dir="plugins"/>
+	</target>
+
+</project>

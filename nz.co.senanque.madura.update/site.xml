@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="Madura" url="file:/home/roger/tmp/Madura.site/">
+      This is the Madura site
+   </description>
+   <feature url="features/nz.co.senanque.madura.feature_3.0.0.jar" id="nz.co.senanque.madura.feature" version="3.0.0">
+      <category name="Madura"/>
+   </feature>
+   <category-def name="Madura" label="Madura">
+      <description>
+         Contains tools to support Eclipse projects that use Madura.
+      </description>
+   </category-def>
+</site>

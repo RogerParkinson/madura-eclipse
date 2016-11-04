@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="Madura Rule Editor"
+            extensions="rul"
+            icon="icons/rule.gif"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            class="nz.co.senanque.madura.ruleeditor.editor.RuleEditor"
+            id="nz.co.senanque.madura.ruleeditor.editor.RuleEditor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="Madura Workflow Editor"
+            extensions="wrk"
+            icon="icons/process.gif"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            class="nz.co.senanque.madura.workfloweditor.editor.WorkflowEditor"
+            id="nz.co.senanque.madura.workfloweditor.editor.WorkflowEditor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="nz.co.senanque.madura.PreferenceInitializer"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="Madura Wizards"
+            id="nz.co.senanque.madura">
+      </category>
+      <wizard
+            name="Rule file"
+            icon="icons/rule.gif"
+            category="nz.co.senanque.madura"
+            class="nz.co.senanque.madura.wizards.RuleNewWizard"
+            id="nz.co.senanque.madura.wizards.RuleNewWizard">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="Madura Wizards"
+            id="nz.co.senanque.madura">
+      </category>
+      <wizard
+            name="Workflow file"
+            icon="icons/process.gif"
+            category="nz.co.senanque.madura"
+            class="nz.co.senanque.madura.wizards.WorkflowNewWizard"
+            id="nz.co.senanque.madura.wizards.WorkflowNewWizard">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="Madura"
+            class="nz.co.senanque.madura.preferences.MaduraPreferencePage"
+            id="nz.co.senanque.madura.preferences.MaduraPreferencePage">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="nz.co.senanque.madura.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            name="Madura"
+            nameFilter="*.rul"
+            class="nz.co.senanque.madura.properties.MaduraPropertyPage"
+            id="nz.co.senanque.madura.properties.MaduraPropertyPage">
+         <enabledWhen>
+            <instanceof
+                  value="org.eclipse.core.resources.IFile">
+            </instanceof>
+         </enabledWhen>
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            name="Madura"
+            nameFilter="*.wrk"
+            class="nz.co.senanque.madura.properties.MaduraPropertyPage"
+            id="nz.co.senanque.madura.properties.MaduraPropertyPage2">
+         <enabledWhen>
+            <instanceof
+                  value="org.eclipse.core.resources.IFile">
+            </instanceof>
+         </enabledWhen>
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            objectClass="org.eclipse.core.resources.IProject"
+            adaptable="true"
+            name="Madura"
+            class="nz.co.senanque.madura.ProjectPropertyPage"
+            id="nz.co.senanque.madura.ProjectPropertyPage">
+      </page>
+   </extension>
+   <extension
+         id="rulesBuilder" name="Madura Rules"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="false">
+            <run class="nz.co.senanque.madura.ruleeditor.editor.RulesBuilder"/>
+      </builder>
+   </extension>
+   <extension
+         id="workflowBuilder" name="Madura Workflow"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="false">
+            <run class="nz.co.senanque.madura.workfloweditor.editor.WorkflowBuilder"/>
+      </builder>
+   </extension>
+</plugin>

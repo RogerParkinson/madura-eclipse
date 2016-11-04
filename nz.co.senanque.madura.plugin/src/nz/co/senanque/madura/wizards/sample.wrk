@@ -1,0 +1,22 @@
+/*******************************************************************************
+ * Madura workflow
+ *******************************************************************************/
+package nz.co.senanque.process.parser;
+
+queue: name="OrderSupervisor" 
+    permission="SUPERVISOR" 
+    read-permission="STOCKSUPERVISOR";
+
+process: Order "AcceptOrder" {
+	try {
+		message=MyMessage;
+	}
+	catch (error) {
+		compute=orderCompute;
+		retry;
+	}
+	catch (abort) {
+		compute=orderCompute;
+		retry;
+	}
+}  
