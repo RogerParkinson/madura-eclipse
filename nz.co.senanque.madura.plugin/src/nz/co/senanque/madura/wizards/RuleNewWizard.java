@@ -9,6 +9,7 @@
 package nz.co.senanque.madura.wizards;
 
 import nz.co.senanque.madura.MaduraPlugin;
+import nz.co.senanque.madura.Utils;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -63,10 +64,11 @@ public class RuleNewWizard extends Wizard implements INewWizard {
 	public boolean performFinish() {
 		final String containerName = page.getContainerName();
 		final String fileName = page.getFileName();
+		final String xsdFileName = page.getXSDFileName();
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				try {
-					doFinish(containerName, fileName, monitor);
+					doFinish(containerName, fileName, xsdFileName, monitor);
 				} catch (CoreException e) {
 					throw new InvocationTargetException(e);
 				} finally {
@@ -94,7 +96,8 @@ public class RuleNewWizard extends Wizard implements INewWizard {
 
 	private void doFinish(
 		String containerName,
-		String fileName,
+		String fileName, 
+		String xsdFileName,
 		IProgressMonitor monitor)
 		throws CoreException {
 		// create a sample file
@@ -116,6 +119,8 @@ public class RuleNewWizard extends Wizard implements INewWizard {
 			stream.close();
 		} catch (IOException e) {
 		}
+		Utils.saveXSDReference(file, xsdFileName);
+		
 		monitor.worked(1);
 		monitor.setTaskName("Opening file for editing...");
 		getShell().getDisplay().asyncExec(new Runnable() {

@@ -8,10 +8,16 @@
  *******************************************************************************/
 package nz.co.senanque.madura.wizards;
 
-import org.eclipse.core.resources.IContainer;
+import nz.co.senanque.madura.Utils;
+import nz.co.senanque.madura.properties.MaduraPropertyPage;
+
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
@@ -24,7 +30,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
@@ -39,8 +47,11 @@ public class RuleNewWizardPage extends WizardPage {
 	private Text containerText;
 
 	private Text fileText;
+	private Text xsdFileText;
 
 	private ISelection selection;
+	private IResource resource;
+
 
 	/**
 	 * Constructor for SampleNewWizardPage.
@@ -77,6 +88,7 @@ public class RuleNewWizardPage extends WizardPage {
 
 		Button button = new Button(container, SWT.PUSH);
 		button.setText("Browse...");
+		WizardPage me = this;
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				handleBrowse();
@@ -91,6 +103,27 @@ public class RuleNewWizardPage extends WizardPage {
 		fileText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				dialogChanged();
+			}
+		});
+
+		label = new Label(container, SWT.NULL);
+		label.setText("");//dummy label to hack layout
+		label = new Label(container, SWT.NULL);
+		label.setText("&XSD File name:");
+
+		xsdFileText = new Text(container, SWT.BORDER | SWT.SINGLE);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		xsdFileText.setLayoutData(gd);
+		xsdFileText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				dialogChanged();
+			}
+		});
+		Button xsdbutton = new Button(container, SWT.PUSH);
+		xsdbutton.setText("Browse...");
+		xsdbutton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				Utils.handleBrowse(xsdFileText, resource , me.getShell());
 			}
 		});
 		initialize();
@@ -109,18 +142,21 @@ public class RuleNewWizardPage extends WizardPage {
 			if (ssel.size() > 1)
 				return;
 			Object obj = ssel.getFirstElement();
-			if (obj instanceof IResource) {
-				IContainer container;
-				if (obj instanceof IContainer)
-					container = (IContainer) obj;
-				else
-					container = ((IResource) obj).getParent();
-				containerText.setText(container.getFullPath().toString());
+	        if (obj instanceof IJavaElement) {
+				IJavaElement ijp = (IJavaElement)obj;
+				containerText.setText(ijp.getPath().toPortableString());
+				resource = ijp.getJavaProject().getProject();
+				
+			}
+			if (obj instanceof IFolder) {
+				IFolder ijp = (IFolder)obj;
+				containerText.setText(ijp.getFullPath().toPortableString());
+				resource = ijp;
 			}
 		}
 		fileText.setText("new_file.rul");
 	}
-
+	
 	/**
 	 * Uses the standard container selection dialog to choose the new value for
 	 * the container field.
@@ -146,6 +182,7 @@ public class RuleNewWizardPage extends WizardPage {
 		IResource container = ResourcesPlugin.getWorkspace().getRoot()
 				.findMember(new Path(getContainerName()));
 		String fileName = getFileName();
+		String xsdFileName = getXSDFileName();
 
 		if (getContainerName().length() == 0) {
 			updateStatus("File container must be specified");
@@ -176,6 +213,22 @@ public class RuleNewWizardPage extends WizardPage {
 				return;
 			}
 		}
+		if (xsdFileName.length() == 0) {
+			updateStatus("XSD File name must be specified");
+			return;
+		}
+		if (xsdFileName.replace('\\', '/').indexOf('/', 1) > 0) {
+			updateStatus("XSD File name must be valid");
+			return;
+		}
+		dotLoc = xsdFileName.lastIndexOf('.');
+		if (dotLoc != -1) {
+			String ext = xsdFileName.substring(dotLoc + 1);
+			if (ext.equalsIgnoreCase("xsd") == false) {
+				updateStatus("XSD File extension must be \"xsd\"");
+				return;
+			}
+		}
 		updateStatus(null);
 	}
 
@@ -190,5 +243,8 @@ public class RuleNewWizardPage extends WizardPage {
 
 	public String getFileName() {
 		return fileText.getText();
+	}
+	public String getXSDFileName() {
+		return xsdFileText.getText();
 	}
 }

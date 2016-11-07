@@ -10,6 +10,7 @@ package nz.co.senanque.madura.properties;
 
 import nz.co.senanque.madura.Utils;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -32,6 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * This is the file property page. It establishes the xsd file that is used to compile the current file.
+ * 
  * @author Roger Parkinson
  *
  */
@@ -110,9 +113,10 @@ public class MaduraPropertyPage extends PropertyPage {
 		}
 		Button button = new Button(composite, SWT.PUSH);
 		button.setText("Browse...");
+		MaduraPropertyPage me = this;
 		button.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
-				handleBrowse(xsdFilePathText);
+				Utils.handleBrowse(xsdFilePathText, (IResource)me.getElement() , me.getShell());
 			}
 		});
 	}
@@ -157,13 +161,16 @@ public class MaduraPropertyPage extends PropertyPage {
 	
 	public boolean performOk() {
 		// store the value in the owner text field
-		try {
-			((IResource) getElement()).setPersistentProperty(
-					new QualifiedName("", XSD_FILE),
-					xsdFilePathText.getText());
-		} catch (CoreException e) {
-			return false;
-		}
+		Utils.saveXSDReference((IFile) getElement(), xsdFilePathText.getText());
+//		IResource resource = (IResource) getElement();
+//		xsdFilePathText.getText()
+//		try {
+//			((IResource) getElement()).setPersistentProperty(
+//					new QualifiedName("", XSD_FILE),
+//					xsdFilePathText.getText());
+//		} catch (CoreException e) {
+//			return false;
+//		}
 		return true;
 	}
 

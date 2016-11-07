@@ -25,6 +25,10 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
 
@@ -67,6 +71,16 @@ public class Utils {
 			message = message.substring(0, j);
 		return message;
 	}
+	public static void saveXSDReference(IFile file, String fileName) {
+		try {
+			file.setPersistentProperty(
+					new QualifiedName("", MaduraPropertyPage.XSD_FILE),
+					fileName);
+		} catch (CoreException e) {
+			
+		}
+	}
+
 	public static SchemaParser getXSDFile(IFile file) {
 		String localXSDFile = null;
 		try {
@@ -170,5 +184,38 @@ public class Utils {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Uses the standard container selection dialog to
+	 * choose the new value for the container field.
+	 */
+	public static void handleBrowse(Text t, IResource element, Shell shell)
+	{
+		IPath elementPath = element.getProjectRelativePath();
+		IProject project = element.getProject();
+		String projectPath = Utils.getProjectPath(element);
+		String s = t.getText();
+		IPath currentFile = null;
+		if (s != null && s.length() > 0) {
+			IFile f = project.getFile(s);
+			currentFile = f.getProjectRelativePath();
+		}
+		if (currentFile == null) {
+			elementPath = elementPath.removeFileExtension().removeFirstSegments(1).removeLastSegments(1);
+		} else {
+			elementPath = currentFile.removeFileExtension().removeFirstSegments(1).removeLastSegments(1);
+		}
+		String path = projectPath+elementPath.toOSString();
+		FileDialog d = new FileDialog(shell,SWT.OPEN);
+		d.setFilterPath(path);
+		d.setFilterExtensions(new String[]{"*.xsd"});
+		String filePath = d.open();
+		if (filePath != null && filePath.startsWith(projectPath)) {
+			filePath = filePath.substring(projectPath.length());
+		}
+		if (filePath != null) {
+			t.setText(filePath);
+		}
+	}
+
 
 }
