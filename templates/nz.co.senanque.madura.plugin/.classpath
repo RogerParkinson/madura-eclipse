@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons-lang-${commons.lang.version}.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jdom-${jdom.version}.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-beans-${springframework.version}.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-context-${springframework.version}.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spring-core-${springframework.version}.jar"/>
+	<classpathentry kind="lib" path="lib/madura-objects-${madura.version}.jar"/>
+	<classpathentry kind="lib" path="lib/madura-rules-${madura.version}.jar"/>
+	<classpathentry kind="lib" path="lib/madura-utils-${madura.version}.jar"/>
+	<classpathentry kind="lib" path="lib/madura-workflow-${madura.workflow.version}.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

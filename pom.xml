@@ -103,12 +103,28 @@
 		<defaultGoal>install</defaultGoal>
  		<resources>
 			<resource>
-				<directory>${basedir}/templates</directory>
+				<directory>${basedir}/templates/nz.co.senanque.madura.feature</directory>
 				<includes>
 					<include>**/*.*</include>
 				</includes>
 				<filtering>true</filtering>
-				<targetPath>${basedir}/test</targetPath>
+				<targetPath>${basedir}/nz.co.senanque.madura.feature</targetPath>
+			</resource>
+			<resource>
+				<directory>${basedir}/templates/nz.co.senanque.madura.plugin</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+				<filtering>true</filtering>
+				<targetPath>${basedir}/nz.co.senanque.madura.plugin</targetPath>
+			</resource>
+			<resource>
+				<directory>${basedir}/templates/nz.co.senanque.madura.update</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+				<filtering>true</filtering>
+				<targetPath>${basedir}/nz.co.senanque.madura.update</targetPath>
 			</resource>
 		</resources>
 		<plugins>
@@ -157,7 +173,7 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/test/nz.co.senanque.madura.plugin/lib</outputDirectory>
+							<outputDirectory>${basedir}/nz.co.senanque.madura.plugin/lib</outputDirectory>
 							<overWriteReleases>false</overWriteReleases>
 							<overWriteSnapshots>false</overWriteSnapshots>
 							<overWriteIfNewer>true</overWriteIfNewer>
