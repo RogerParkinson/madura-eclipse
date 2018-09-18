@@ -8,7 +8,7 @@
 	<groupId>nz.co.senanque</groupId>
 	<artifactId>madura-eclipse</artifactId>
 	<packaging>pom</packaging>
-	<version>3.0.0</version>
+	<version>3.1.0</version>
 	<name>MaduraEclipsePlugin</name>
 	<url>https://www.madurasoftware.com</url>
 	<organization>
@@ -93,7 +93,7 @@
 			<version>${commons.lang.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>jdom</groupId>
+			<groupId>org.jdom</groupId>
 			<artifactId>jdom</artifactId>
 			<version>${jdom.version}</version>
 		</dependency>
@@ -158,6 +158,31 @@
 							</includes>
 							<followSymlinks>false</followSymlinks>
 						</fileset>
+						<fileset>
+							<directory>${basedir}/nz.co.senanque.madura.feature</directory>
+							<includes>
+								<include>feature.xml</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+						<fileset>
+							<directory>${basedir}/nz.co.senanque.madura.plugin</directory>
+							<includes>
+								<include>about.html</include>
+								<include>.classpath</include>
+								<include>about.properties</include>
+								<include>META-INF/MANIFEST.MF</include>
+								<include>lib/*.*</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+						<fileset>
+							<directory>${basedir}/nz.co.senanque.madura.update</directory>
+							<includes>
+								<include>site.xml</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
 					</filesets>
 				</configuration>
 			</plugin>
@@ -168,7 +193,7 @@
 				<executions>
 					<execution>
 						<id>copy-dependencies</id>
-						<phase>package</phase>
+						<phase>process-resources</phase>
 						<goals>
 							<goal>copy-dependencies</goal>
 						</goals>
@@ -194,6 +219,26 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-assembly-plugin</artifactId>
+			  <version>3.1.0</version>
+			  <configuration>
+			    <descriptors>
+			      <descriptor>assembly.xml</descriptor>
+			    </descriptors>
+			    <outputDirectory>${basedir}/target</outputDirectory>
+			  </configuration>
+			  <executions>
+			    <execution>
+			      <id>make-assembly</id> <!-- this is used for inheritance merges -->
+			      <phase>package</phase> <!-- append to the packaging phase. -->
+			      <goals>
+			        <goal>single</goal> <!-- goals == mojos -->
+			      </goals>
+			    </execution>
+			  </executions>
 			</plugin>
 		</plugins>
 	</build>

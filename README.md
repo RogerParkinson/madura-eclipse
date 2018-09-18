@@ -21,24 +21,14 @@ Now add the following options:
 
 You should also add SLF4J API (which is not shown in the image because it is already installed).
 
-Libraries
---
-
-In the plugin project there is a lib directory containing jar files.
-Those files will need to be updated to use a later version of Madura Rules and Madura Workflow when necessary.
-Note that it is not necessary to include the full runtime dependency tree, just the selected subset. So there is no point using ivy or maven to source those libraries.
-
 Build
 --
 
-The three projects (feature, plugin, update) can be built by invoking Project>Build all from Eclipse.
-That will build the feature and plugin. To build the update project first run the clean.xml ant script, then open the
-site.xml file in the editor. It should look like this:
-
-![Update Site Map](UpdateSiteMap.png)
-
-Click on Synchronize and then Build All.
-The resulting files are created in the update project ready for deployment on the web.
+ 1. Run the maven build with goals `clean process-resources` in the top project to update the sub-projects with the correct versions and dependencies. These are copied from the templates directory and the maven dependencies.
+ 2. Refresh the workspace.
+ 3. Invoke Project>Build all from Eclipse. That will build the feature and plugin sub-projects.
+ 4. Open the update project's site.xml file in the editor. Click on Synchronize and then click on Build All.
+ 5. run maven again with goals `org.apache.maven.plugins:maven-assembly-plugin:single` which will create the zip file in the target directory. The zip file contains the plugin.
 
 Testing
 --
