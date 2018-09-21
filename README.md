@@ -1,7 +1,12 @@
 madura-eclipse
 ==
 
-Eclipse plugin and associated projects (feature, update) to assist development of rules and workflow files.
+This Eclipse Plugin supports editing of Madura Rules and Madura Workflow files.
+The Madura Suite makes use of rules and workflow definitions. Unlike similar products it keeps these
+definitions in text files rather than maintaining them with a complex UI. But a helpful editor is always welcome and this
+plugin provides two of them. One for the workflow definitions and one for the rules definitions. There are also creation wizards
+for each to get you started, syntax checking and content assist while you edit, and an outline to help you navigate.
+These are just editors, they do not provide a runtime environment.
 
 Prerequisites
 --
@@ -21,7 +26,7 @@ Now add the following options:
 
 You should also add SLF4J API (which is not shown in the image because it is already installed).
 
-Build
+Build the Plugin
 --
 
  1. Run the maven build with goals `clean process-resources` in the top project to update the sub-projects with the correct versions and dependencies. These are copied from the templates directory and the maven dependencies.
@@ -35,7 +40,3 @@ Testing
 
 To test changes to the plugin run the plugin project with Run As>Eclipse Application
 
-Usage
---
-
-Documentation on usage is in the Madura projects documentation [Madura Rules](http://www.madurasoftware.com/madura-rules.pdf) and [Madura Workflow](http://www.madurasoftware.com/madura-workflow.pdf).

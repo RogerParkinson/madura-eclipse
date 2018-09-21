@@ -1,0 +1,150 @@
+<?xml-stylesheet type="text/xsl" href="MaduraHTML.xsl" ?>
+<doc xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://www.madurasoftware.com/maduradocs.xsd">
+	<title>
+		<MainTitle>MaduraEclipse</MainTitle>
+		<SubTitle>User Guide</SubTitle>
+		<Author>Roger Parkinson</Author>
+		<Revision>$Revision: 1$</Revision>
+		<image>logo.jpg</image>
+		<references>
+			<reference t="JAXB" url="https://jaxb.dev.java.net/" />
+			<reference t="MaduraObjects" url="https://github.com/RogerParkinson/madura-objects-parent/tree/master/madura-objects"/>
+			<reference t="MaduraRules" url="https://github.com/RogerParkinson/madura-objects-parent/tree/master/madura-rules"/>
+			<reference t="MaduraWorkflow" url="https://github.com/RogerParkinson/madura-workflows"/>
+			<reference t="Madura Suite" url="https://madurasoftware.com/madura"/>
+			<reference t="EPL 1.0" url="http://opensource.org/licenses/EPL-1.0"/>
+		</references>
+	</title>
+	<body>
+ 		<process-log/>
+		<process-references/>
+		<h1 t="Overview">
+		<p>TThis Eclipse Plugin supports editing of Madura Rules and Madura Workflow files.
+The Madura Suite makes use of rules and workflow definitions. Unlike similar products it keeps these
+definitions in text files rather than maintaining them with a complex UI. But a helpful editor is always welcome and this
+plugin provides two of them. One for the workflow definitions and one for the rules definitions. There are also creation wizards
+for each to get you started, syntax checking and content assist while you edit, and an outline to help you navigate.
+These are just editors, they do not provide a runtime environment.</p>
+		</h1>
+		<h1 t="Operation">
+		<h2 t="Getting Started">
+		<p>Details of setting up a project that uses the Madura Suite<referenceLink t="Madura Suite"></referenceLink> are covered in documentation for MaduraObjects<referenceLink t="MaduraObjects"></referenceLink>, 
+		MaduraRules<referenceLink t="MaduraRules"></referenceLink> and MaduraWorkflow<referenceLink t="MaduraWorkflow"></referenceLink>. But the core requirements for using this plugin
+		are:</p>
+		<list>
+		<le>Eclipse Luna (4.4.0) through Eclipse Oxygen (4.7.3a) installed</le>
+		<le>This plugin installed (from https://www.madurasoftware.com/madura-eclipse)</le>
+		<le>A Java project</le>
+		<le>An XSD file defining some objects</le>
+		</list>
+		<p>The XSD file needs to include some Madura-specific tags, but mostly it needs your objects defined in a way that JAXB<referenceLink t="JAXB"></referenceLink> can generate Java classes from them using a maven plugin. But you
+		don't actually need the classes generated for this Eclipse plugin to operate. This plugin reads the XSD file directly, not the Java classes.</p>
+		</h2>
+		<h2 t="Wizards">
+		<p>To create a rul or wrk file you can use the relevant wizards. You right-click on a location in the package explorer and pick New>Other, then look under 'Madura Wizards'.</p>
+ 		<img width="12cm" href="images/Wizards.png">Wizards</img>
+		<p>They both operate the same way so if you pick one you will see a dialog like this:</p>
+ 		<img width="12cm" href="images/WizardsRule.png">WizardsRule</img>
+		<p>You need to adjust the rule file name to your liking and specify the XSD file the new file will find its data definitions in.</p>
+		<p>If you want to change the XSD file reference later use the File Properties (right click on the file in Package Explorer, then Properties&gt;Madura).</p>
+		<img width="12cm" href="images/FileProperties.png">File Properties</img>
+		<p>Once the new file is created it will be opened in the relevant editor.</p>
+		</h2>
+		<h2 t="Rule Editor">
+		<p>The new file has some sample rules to help you get started but beware, this is just static content, it was not generated from your XSD file so the fields etc will not be correct. 
+		That means you may see syntax errors. But seeing the format at this stage is usually helpful.</p>
+		<code>
+/*******************************************************************************
+ * Madura Rules
+ *******************************************************************************/
+formula: SampleObject "sample formula"
+{
+	decisionField = celsius > 30F;
+}
+rule: SampleObject "sample rule"
+{
+	if (size == "Small")
+	{
+		readonly(testing);
+		activate(testing);
+		amount = 10;
+	}
+}
+constraint: SampleObject "sample constraint"
+{
+	testDouble > 100D;
+}
+		</code>
+		<p>The Outline window allows you to navigate to the rule you want to edit.</p>
+		<p>The Editor itself does the usual syntax checking you are used to in Eclipse. It will detect mis-spelled variable names
+		and CTRL-SPACE will offer a drop down list of suggestions. The suggestions are always field names and functions.</p>
+		</h2>
+		<h2 t="Workflow Editor">
+		<p>Like the Rule Editor the Workflow Editor generates some static content to get you started and opens the file:</p>
+		<code>
+/*******************************************************************************
+ * Madura workflow
+ *******************************************************************************/
+package nz.co.senanque.process.parser;
+
+queue: name="OrderSupervisor" 
+    permission="SUPERVISOR" 
+    read-permission="STOCKSUPERVISOR";
+
+process: Order "AcceptOrder" {
+	try {
+		message=MyMessage;
+	}
+	catch (error) {
+		compute=orderCompute;
+		retry;
+	}
+	catch (abort) {
+		compute=orderCompute;
+		retry;
+	}
+}  
+		</code>
+		<p>Like the Rules Editor this one supports outline navigation, syntax checking and drop down suggestions.</p>
+		</h2>
+		<h2 t="Advanced Topics">
+		<p>If you are using custom functions in your rules (most people don't) then	you need to tell the plugin about those in the 
+		project properties (right click on the project in Package Explorer, then Properties&gt;Madura)</p>
+		<img width="12cm" href="images/MaduraProperties.png">Properties</img>
+		<p>The Classes path field should hold the directory your compiled java classes are placed into. For maven projects this will default to target/classes/.
+		In the Class names field you just put a comma separated list of the classes that hold your custom functions. This will enable the validation code
+		in the plugin to correctly validate your references to the custom functions without flagging them as errors.</p>
+		<p>Similarly Madura Workflow allows you to define external messages and compute modules. These are simpler for the parser than Rule Functions because they are
+		(to the parser) just names. Supply a comma separated list of the names you use for messages and computes in the relevant boxes.</p>
+		<p>Finally the parser used to validate the files needs a buffer size setting, this defaults to 400 which is normally large enough but if you have very long comments 
+		in your files you might need to make it larger. Use the preferences page (Window&gt;Preferences&gt;Madura) for this.</p>
+		</h2>
+		</h1>
+		<a1 t="License">
+			<p>The code specific to MaduraObjects is licensed under EPL 1.0 <referenceLink t="EPL 1.0"/>.</p>
+			<p>The dependent products have compatible licenses as specified in their pom files.</p>
+		</a1>
+		<a1 t="Release Notes">
+		<note>You need Java 1.8 to compile this project.</note>
+		<table width="12cm">
+			<tw>12cm</tw>
+		<tr>
+			<th>3.1.0</th>
+		</tr>
+		<tr>
+			<td>Reworked documentation.</td>
+		</tr>
+		<tr>
+			<td>Aligned plugin with Madura versions.</td>
+		</tr>
+		<tr>
+			<th>1.0</th>
+		</tr>
+		<tr>
+			<td>Initial version</td>
+		</tr>
+		</table>
+		</a1>
+	</body>
+</doc>

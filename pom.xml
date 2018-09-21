@@ -8,6 +8,7 @@
 	<groupId>nz.co.senanque</groupId>
 	<artifactId>madura-eclipse</artifactId>
 	<packaging>pom</packaging>
+	<description>Support for editing rules files (.rul) and workflow files (.wrk) in an Eclipse Plugin.</description>
 	<version>3.1.0</version>
 	<name>MaduraEclipsePlugin</name>
 	<url>https://www.madurasoftware.com</url>
@@ -128,6 +129,19 @@
 			</resource>
 		</resources>
 		<plugins>
+			<plugin>
+				<groupId>nz.co.senanque</groupId>
+				<artifactId>maduradocs</artifactId>
+				<version>6.3.3</version>
+				<executions>
+					<execution>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>pdf</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 			  <groupId>org.codehaus.mojo</groupId>
 			  <artifactId>build-helper-maven-plugin</artifactId>
