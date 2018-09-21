@@ -8,6 +8,8 @@ plugin provides two of them. One for the workflow definitions and one for the ru
 for each to get you started, syntax checking and content assist while you edit, and an outline to help you navigate.
 These are just editors, they do not provide a runtime environment.
 
+[![Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client](https://marketplace.eclipse.org/sites/all/themes/solstice/public/images/marketplace/btn-install.png)](http://marketplace.eclipse.org/marketplace-client-intro?mpc_install=4283998 "Drag to your running Eclipse* workspace. *Requires Eclipse Marketplace Client")
+
 Prerequisites
 --
  
