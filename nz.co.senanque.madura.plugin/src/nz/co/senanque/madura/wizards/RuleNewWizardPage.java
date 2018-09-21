@@ -9,12 +9,13 @@
 package nz.co.senanque.madura.wizards;
 
 import nz.co.senanque.madura.Utils;
-import nz.co.senanque.madura.properties.MaduraPropertyPage;
 
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.dialogs.IDialogPage;
@@ -30,9 +31,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
@@ -146,12 +145,25 @@ public class RuleNewWizardPage extends WizardPage {
 				IJavaElement ijp = (IJavaElement)obj;
 				containerText.setText(ijp.getPath().toPortableString());
 				resource = ijp.getJavaProject().getProject();
-				
 			}
 			if (obj instanceof IFolder) {
 				IFolder ijp = (IFolder)obj;
 				containerText.setText(ijp.getFullPath().toPortableString());
 				resource = ijp;
+			}
+			if (obj instanceof IFile) {
+				IFile ijp = (IFile)obj;
+				IContainer container = ijp.getParent();
+				if (container instanceof IFolder) {
+					IFolder f = (IFolder)container;
+					containerText.setText(f.getFullPath().toPortableString());
+					resource = f;
+				} else if (container instanceof IProject) {
+					IProject p = (IProject)container;
+					containerText.setText(p.getFullPath().toPortableString());
+					resource = p;
+					
+				}			
 			}
 		}
 		fileText.setText("new_file.rul");

@@ -11,7 +11,9 @@ package nz.co.senanque.madura.wizards;
 import nz.co.senanque.madura.Utils;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -149,6 +151,20 @@ public class WorkflowNewWizardPage extends WizardPage {
 				IFolder ijp = (IFolder)obj;
 				containerText.setText(ijp.getFullPath().toPortableString());
 				resource = ijp;
+			}
+			if (obj instanceof IFile) {
+				IFile ijp = (IFile)obj;
+				IContainer container = ijp.getParent();
+				if (container instanceof IFolder) {
+					IFolder f = (IFolder)container;
+					containerText.setText(f.getFullPath().toPortableString());
+					resource = f;
+				} else if (container instanceof IProject) {
+					IProject p = (IProject)container;
+					containerText.setText(p.getFullPath().toPortableString());
+					resource = p;
+					
+				}			
 			}
 		}
 		fileText.setText("new_file.wrk");
